@@ -1,0 +1,194 @@
+Szymon Szkarłat
+Laboratorium 3.
+-------------------------------------------------
+-------------------------------------------------
+
+
+Zadania:
+Zadanie 1.
+Tak, istnieje możliwość obejrzenia zawartości wszystkich katalogów do samego kóńca drzewa plików ( w sposób rekurencyjny), za pomocą jednego wywołania, wykorzystując polecenie: ls-R.
+-------------------------------------------------
+
+Zadanie 2.
+SUID - dla właściciela w miejscu x (S)
+SGID - dla grupy w miejscu x (S)
+SVTX (sticky bit) - dla pozostałych użytkowników w miejscu x (S)
+-------------------------------------------------
+
+Zadanie 3.
+Utworzenie pliku zawierającego strony podręcznika dla komendy ls, za pomocą polecenia: man ls > $HOME/c2/text/plik_ls.txt.
+Prawa dostępu dla utworzonego pliku, sprawdzamy za pomocą polecenia: ls -l $HOME/c2/text. 
+Wynik wykonanego polecenia: -rw-r--r-- 1 sszkarla ietgrp 9691 Nov 17 15:29 plik_ls.txt. Plik może zostać zmieniony tylko przez właściciela, natomiast przez grupę i innych może zostać jedynie odczytany, stąd wniosek, że jedynie właściciel pliku może jedynie zmienić prawa dostępu do pliku za pomocą chociażby komendy chmod.
+-------------------------------------------------
+
+Zadanie 4.
+Zmiana praw dostępu do pliku, tak aby jedynie właściciel indywidualny mógł odczytywać i zapisywać go, za pomocą polecenia: chmod 600 $HOME/c2/text/plik_ls.txt
+Zmiana uprawień dla katalogu, w którym znajduje się plik, tak aby nie zadziałało polecenie rm, za pomocą komendy: chmod 500 $HOME/c2/text
+-------------------------------------------------
+
+Zadanie 5.
+Kopiujemy plik o nazwie plik_ls.txt: cp $HOME/c2/text/plik_ls.txt $HOME/plik2_ls.txt. Uprawnienia nowo powstałego pliku są takie same jak pliku, z kórego kopiowaliśmy.
+Następnie zmieniamy uprawnienia tak, aby tylko właściciel i inni członkowie jego grupy podstawowej mogli go odczytać, za pomocą polecenia: chmod 404 $HOME/plik2_ls.txt
+-------------------------------------------------
+
+Zadanie 6.
+Za pomocą komendy umask możemy podejrzeć jaka jest aktualnie lub jeśli jej nie zmienialiśmy domyślna, wartość umask. Domyślna wartość to 022. Za pomocą tej samej komedy można zmienić domyślną wartość.
+-------------------------------------------------
+
+Zadanie 7.
+Polecenie: find ~ -type f -exec du -b {} + | sort -n | tail -l
+Wynik: 122376  /home/ietgrp/sszkarla/c2/bin/moj_ls
+-------------------------------------------------
+
+Zaadanie 8.
+Polecenie: find ~ -type f -exec du {} + | sort -n | tail -l
+Wynik: 120 dla pliku moj_ls, który jest dostępny pod scieżką/home/ietgrp/sszkarla/c2/bin/moj_ls
+-------------------------------------------------
+
+Zadanie 9.
+Polecenie: find /usr/include -type f -iname "c*" -exec ls -l {} +
+Polecenie zwróciło bardzo długą listę plików regularnych, o to fragment:
+-rw-r--r-- 1 root root   7136 May  2  2016 /usr/include/unicode/currpinf.h
+-rw-r--r-- 1 root root   2876 May  2  2016 /usr/include/unicode/currunit.h
+-rw-r--r-- 1 root root   1710 Oct 10  2013 /usr/include/unistring/cdefs.h
+-rw-r--r-- 1 root root   8387 Jul  4  2020 /usr/include/vorbis/codec.h
+-rw-r--r-- 1 root root   5335 Dec 31  2015 /usr/include/xapian/compactor.h
+-rw-r--r-- 1 root root  14911 Oct  1  2015 /usr/include/xcb/composite.h
+-------------------------------------------------
+
+Zadanie 10.
+Polecenie 1: find ~ -type f -mtime +2 -exec ls -l {} +
+Wynik 1:
+-rw------- 1 sszkarla ietgrp 12288 Oct 29 18:44 /home/ietgrp/sszkarla/.swp
+-rw-r--r-- 1 sszkarla ietgrp 12288 Oct 28 17:32 /home/ietgrp/sszkarla/katalog1/.plik3.txt.swp
+-rw-r--r-- 1 sszkarla ietgrp    12 Oct 28 17:26 /home/ietgrp/sszkarla/katalog1/plik3.txt
+-rw-r--r-- 1 sszkarla ietgrp    30 Nov  2 16:09 /home/ietgrp/sszkarla/liczby.txt
+-rw-r--r-- 1 sszkarla ietgrp    13 Oct 29 18:28 /home/ietgrp/sszkarla/plik1.txt
+-rw-r--r-- 1 sszkarla ietgrp     0 Oct 29 18:28 /home/ietgrp/sszkarla/pliki1.txt
+-rwxr-xr-x 1 sszkarla ietgrp    24 Oct 28 17:38 /home/ietgrp/sszkarla/skrypt1.sh~
+
+Polecenie 2: find ~ -maxdepth 1 -type f -mtime +2 -exec ls -l {} +
+Wynik 2:
+-rw------- 1 sszkarla ietgrp 12288 Oct 29 18:44 /home/ietgrp/sszkarla/.swp
+-rw-r--r-- 1 sszkarla ietgrp    30 Nov  2 16:09 /home/ietgrp/sszkarla/liczby.txt
+-rw-r--r-- 1 sszkarla ietgrp    13 Oct 29 18:28 /home/ietgrp/sszkarla/plik1.txt
+-rw-r--r-- 1 sszkarla ietgrp     0 Oct 29 18:28 /home/ietgrp/sszkarla/pliki1.txt
+-rwxr-xr-x 1 sszkarla ietgrp    24 Oct 28 17:38 /home/ietgrp/sszkarla/skrypt1.sh~
+-------------------------------------------------
+
+Zadanie 11.
+Polecenie: find /usr/include -maxdepth 1 -type f -size -12k -iname "m*.h" | wc -l
+Wynik: Jest 11 takich plikó regularnych
+-------------------------------------------------
+
+Zadanie 12.
+Utworzenie archiwum katalogu c2, a nstępnie kompresacja:
+a) jeden krok, ale dwie komendy: tar -cf archiwum.tar c2 && gzip archiwum.tar
+b) jeden krok i jedna komenda: tar -czf archiwum.tar.gz c2
+
+Usunięcie katalogu: rm -r c2
+
+Odtworzenie go ze zbioru: tar -xvf archiwum.tar.gz
+c2/
+c2/text/
+c2/text/plik_ls.txt
+tar: c2/text/plik_ls.txt: Cannot open: File exists
+c2/bin/
+c2/bin/moj_ls
+c2/plik2.txt
+-------------------------------------------------
+
+Zadanie 13.
+Miejsce zajmowane na dysku: quota -u `id -un`
+Wynik polecenia: Filesystem  blocks   quota   limit   grace   files   quota   limit   grace
+/dev/mapper/vz_data-student
+                    716  1048576 1179648              55  102400  115200
+
+Ograniczenie na rozmiar dysku: du -sh ~
+Wynik: 716K
+-------------------------------------------------
+
+Zadanie 14.
+Polecenie: df -i
+Wynik: 
+Filesystem                         Inodes   IUsed     IFree IUse% Mounted on
+/dev/mapper/vz_data-student     268435456 5815380 262620076    3% /
+/dev/mapper/vz_data-sw0           2097152  244313   1852839   12% /usr
+/dev/mapper/vz_data-student_var   8388608    1069   8387539    1% /var
+none                             16150995      16  16150979    1% /sys/fs/cgroup
+none                             16150995      65  16150930    1% /dev
+tmpfs                            16150995     259  16150736    1% /run
+tmpfs                            16150995       1  16150994    1% /dev/shm
+-------------------------------------------------
+
+Zadanie 15.
+Polecenie: mount -l 
+Wynik to: pierwsza kolumna - nazwa, druga - mountpoint, trzecia - typ systemu plików
+
+Polecenie: lsblk -o NAME,SERIAL
+Wynik: NAME   SERIAL
+	sda    VB8d0ba88e-69d909eb
+	├─sda1 
+	├─sda2 
+	└─sda5 
+	sr0    VB2-01700376
+-------------------------------------------------
+
+Zadanie 16.
+Polecenie: find /usr -maxdepth 1 -type d | grep -Ev ”^/usr$” | xargs -n1 du -s | sort -nr
+Wynik polecenia: 
+1412060 /usr/lib64
+929084  /usr/share
+530276  /usr/bin
+309976  /usr/doc
+298116  /usr/include
+225104  /usr/libexec
+182532  /usr/extra
+74120   /usr/man
+53696   /usr/root
+40904   /usr/sbin
+19680   /usr/var
+12832   /usr/info
+2252    /usr/lib
+1284    /usr/games
+620     /usr/x86_64-slackware-linux
+4       /usr/src
+4       /usr/X11R6
+-------------------------------------------------
+
+Zadanie 17.
+Utworzenie dowiązania symbolicznego o nazwie symbol w katalogu $HOME/c2/bin, korzystając z polecenia ln: $ ln -s c2/bin/moj_ls c2/text/symbol 
+Utworzenie dowiązania twardego o nazwie twardy w katalogu $HOME/c2/text: ln c2/text/plik_ls.txt c2/bin/twardy 
+
+Obserwacje:
+1) i-node dowiązania twardego jest takie samo jak oryginalnego pliku.
+2) i-node dowiązania symbolicznego jest większe niż oryginalnego pliku.
+-------------------------------------------------
+-------------------------------------------------
+
+
+Zadania sprawdzające:
+Zadanie 1.
+Polecenie: find ~ -type f -exec ls -lt {} + | tail -l
+Wynik: -rw-r--r-- 1 sszkarla ietgrp     12 Oct 28 17:26 /home/ietgrp/sszkarla/katalog1/plik3.txt
+-------------------------------------------------
+
+Zadanie 2.
+Polecenie:find /usr/include -maxdepth 1 -type d | wc -l
+Wynik: 303
+-------------------------------------------------
+
+Zadanie 3.
+Polecenie: find /usr/include -maxdepth 1 -type f -iname "m*.h" | awk -F "/" 'length($4) == 6 {print $4}' | grep ^m | wc -l
+Wynik: 2
+-------------------------------------------------
+
+Zadanie 4.
+Polecenie: find /usr/include -type f -size +12000c | wc -l
+Wynik: 3876
+-------------------------------------------------
+
+Zadanie 5.
+Polecenie: find /usr/bin -type f -size -1024k | wc -l
+Wynik: 2233
+-------------------------------------------------
