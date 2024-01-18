@@ -1,0 +1,55 @@
+zadanie 1.
+Polecenie wyświetla uprawnienia do pliku, w bierzącym katalogu tj. Desktop. Następnie wybiera tylko pliki zwykłe (plik zwykły, ma na początku "-"), następnie tylko pierwsza kolumna, następnie grupujemy (sort bez opcji), kolejno liczymy te linie, następnie sortujemy malejąco.
+ls -la | grep "^-" | awk '{print $1}' | sort | uniq -c | sort -nr
+Wynik polecenia:
+     12 -rw-r--r--
+      5 -rwxr-xr-x
+      1 -rwxrw-rw-
+      1 -r--------
+
+zadanie 2.
+Zmiana uprawnien wszystkim plikom w podanym katalogu, jedyne uprawnienia to odczyt (r)
+chmod +r pliki/*
+chmod 700 pliki/*
+----------
+Znajdź w plikach najdłuższe słowo składające się z liter [a-zA-Z].
+ls | grep -o -E '\b[a-zA-Z]+\b' | awk '{print $1, length}' | sort -k 2 -nr | head -1
+wyrażenia regularne
+WAŻNE: najlepiej dawać pojedyncze nawiasy.
+
+zadanie 3.
+Zadanie napisane w bash
+Mediana podanych liczb całkowitych
+#!/bin/bash
+
+mediana() {
+        local numbers=($(echo "$1" | tr ' ' '\n' | sort -n))
+        local len=${#numbers[@]}
+        local middle=$((len/2))
+
+        echo "${numbers[middle]}"
+}
+
+
+if [ "$#" -eq 0 ];then
+        echo "Uzycie $0 <lista_liczb>"
+        exit
+elif [ $(( $# % 2)) -eq 0 ];then
+        echo "Liczba liczb musi byc nieparzysta"
+        exit
+else
+        data="$@"
+        echo $(mediana "$data")
+fi
+
+zadanie 4.
+Polecenia:
+ps aux - wyświetla informacje o wszystkich procesach
+pgrep -f "sleep 2000" - polecenie pomocne jest jeżeli chcemy wyświetlić PID procesu, który ma dw człony np. komenda i parametr
+pkill -f "sleep 3000" - służy do killowania procesu
+pidwait - polecenie czeka 
+We wszystkich tych przypadkach można wprowadzić nazwę komendy, która utworzyła dany proces
+----------
+Polecenie trochę bardziej na około
+kill -9 `ps aux | grep "sleep 2000" | head -1 | awk '{print$2}'`
+
