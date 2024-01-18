@@ -1,9 +1,0 @@
-1. Komenda do odczytania RSS
-cat /proc/`pidof stackheap`/smaps | grep Rss | awk -F" " '{print $2}' | sum | awk -F" " '{print $1}'
-
-2. Ustawianie limitu
-Jak chcemy ustawić limit
-Polecenie: ulimit -v x
-x - rozmiar w kB (kilobajtach)
-
-11422
