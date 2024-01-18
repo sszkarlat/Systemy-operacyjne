@@ -1,0 +1,9 @@
+1. Komenda do odczytania RSS podanego pliku
+cat /proc/`pidof ./stackheap`/smaps | grep Rss | awk '{print $2}' | sum | awk '{print $1}'
+
+2. Ustawianie limitu
+Ustawianie limitu
+Polecenie: ulimit -v x
+x - rozmiar w kB (kilobajtach)
+
+11422
