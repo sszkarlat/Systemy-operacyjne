@@ -1,0 +1,190 @@
+Szymon Szkarłat
+Laboratorium 4.
+-------------------------------------------------
+-------------------------------------------------
+
+
+Zadania:
+Zadanie 1.
+Wykorzystam w tym celu komendę ps -ef.
+Usykam:
+1) PID - numer procesu
+2) PPID - numer procesu rodzica
+3) STIME - czas startu
+4) %MEM - zajęcie pamięci 
+4) TTY - terminal
+5) COMMAND/CMD - komenda wywołująca proces
+
+Opcje Unixowe są poprzedzane myślnikiem, a BSD nie są.
+-------------------------------------------------
+
+Zadanie 2.
+Polecenie:
+ps -eo user,pid,pri,ni,tty
+Wynik: Komenda wyświetla informacje o właścicielu procesu, numerze PID, wartościach priorytetu i parametru NICE oraz z jakiego terminalu korzysta proces. 
+-------------------------------------------------
+
+Zadanie 3.
+Polecenie 1: 
+mkdir c3 -> tworzymy nowy katalog o nazwie "c3" w katalogu domowym
+
+Polecenie 2:
+nano ./prog.c -> tworzymy plik o nazwie "prog.c"i zapisuję odpowiednio podany kod w C++
+
+Polecenie 3:
+./prog & -> uruchamiamy program w tle, za pomocą & (ampersanda)
+
+Polecenie 4:
+ps -o command,pid,pri,ni
+Wynik polecenia 4:
+
+COMMAND                       PID PRI  NI
+ps -o command,pid,pri,ni      408  19   0
+-bash                       32193  19   0
+./prog                      32301  19   0
+
+
+Polecenie 5 - obniżenie parametru NICE, za pomocą komendy renice:
+renice 19 32301
+COMMAND                       PID PRI  NI
+ps -o command,pid,pri,ni      408  19   0
+-bash                       32193  19   0
+./prog                      32301  0   19
+
+Przy parametrze NICE 19 %CPU wynosi 99.9, a przy -20 również 100
+
+Zależność pomiędzy PRI a NICE: PRI = 19 - NICE
+
+Polecenie 6: jobs
+Wynik polecenia: 
+[1]+  Running                 ./prog &
+
+Polecenie 7: kill 32301 -> zakończenie procesu
+
+W momencie kiedy parametr NICE jest ustawiony na 0, %CPU wynosi 99.7.
+Parametr NICE można zmieniać w zakresie od -20 do 19.
+-------------------------------------------------
+
+Zadanie 4.
+Uruchamiamy program prog.c jeszcze raz za pomocą polecenia: ./prog jako pierwszoplanowy. Program po wylogowaniu i ponownym zalogowaniu przesta działać.
+-------------------------------------------------
+
+Zadanie 5.
+Ponownie powtarzamy operację, ale tym razem uruchamiamy program w tle. Po wylogowaniu proces przestał działać.
+-------------------------------------------------
+
+Zadanie 6.
+Aby program prog wykonywał się w tle mimo odłączenia się od systemu należy wykonać polecenie: nohup ./prog &
+
+Ogolna idea polecenia nohup. 
+Nohup uruchamia polecenie na pierwszym planie i przekierowuje dane wyjściowe polecenia do pliku nohup.out. Ten plik jest tworzony w bieżącym katalogu roboczym. Aby nasze polecenie działało w tle należy dodać jedynie & na końcu komendy.
+
+Usuwamy proces za pomocą komendy: kill prog.
+-------------------------------------------------
+
+Zadanie 7.
+Uruchamiamy program prog w tle, z wykorzystaniem komendy: ./prog &. Następnie wysyłamy do niego sygnał SIGSTOP. Stan uruchomionego procesu zmienił się na T. Natomiast z czasem CPU zmniejsza się.
+Kolejno do zatrzymanego procesy wysyłamy sygnał SIGCONT, stan procesu zmienił się na R. Natomiast wartość w kolumnie opisującej stopień wykorzystania procesora (CPU) się zwiększa. 
+Na końcu usuwamy proces z wykorzystaniem polecenia: kill prog
+-------------------------------------------------
+
+Zadanie 8.
+Polecenie 1: wget galaxy.agh.edu.pl/~boryczko/signal.c
+Pobieramy plik o nazwie siganl.c, zawierający kod źródłowy programu w języku C.
+
+SIGQUIT domyślnie powoduje zakończenie procesu z zapisem obrazu pamięci.
+SIGTSTP domyślnie powoduje zatrzymanie procesu.
+SIGTERM domyślnie powoduje zakończenie procesu.
+Jednak po wysłaniu tych sygnałów program nadal działał.
+Dopiero sygnał SIGKILL zabił proces (kill -9 signal)
+-------------------------------------------------
+
+Zadanie 9.
+Polecenie: ps -eo state,vsz,pid | awk '$1 == "T" {print $2, $3}' | sort -n
+
+Wynik powyższego polecenia, ktore wygląda w ten sposób, ponieważ procesów, które używają tyle samo pamięci wirtualnej jest więcej niż jeden, a zatem wyświetlane są wszystkie o takiej samej wartości VSZ.
+Wykorzystując polecenie: ps -eo state,vsz,pid | awk '{if ($1 == "T") {print $2, $3}}' | sort -n | cut -d " " -f1 | uniq -c. Mogę sprawdzić, że procesów o takim samym rozmiarze jest 8.
+
+A więc ich PID to (odpowiednie polecenie: ps -eo state,vsz,pid | awk '{if ($1 == "T") {print $2, $3}}' | sort -n | tail -n8 | cut -d " " -f2):
+17978
+2523
+25504
+25792
+28794
+3063
+31506
+447
+-------------------------------------------------
+
+Zadanie 10.
+Polecenie: ps -eo nice,user | uniq -c | sort -k1 | awk '{if ($2 == 0) {print $1, $3}}' | sort -n | tail -n1
+
+Wynik:
+12 apache
+
+Zadanie 11.
+Polecenie:
+ps -eo pid,vsz | sort -k2 | awk '{print $1}' | tail -n3
+
+Wynik polecenia:
+18504
+21930
+18775 
+-------------------------------------------------
+-------------------------------------------------
+
+
+Zadania sprawdzające:
+Zadanie 1.
+Polecenie: ps L
+Polecenie to wypisuje wszystkie dostępne nazwy kolumn dla komendy ps
+-------------------------------------------------
+
+Zadanie 2.
+Polecenie: ps -o user,size,command --user 0 --sort size
+
+Rezultat polecenia:
+USER      SIZE COMMAND
+root         0 [kthreadd/102]
+root         0 [khelper]
+root       308 init [3]
+root       332 /usr/sbin/syslogd
+root       340 /usr/sbin/crond -l notice
+root       348 /sbin/agetty --noclear 38400 tty1 linux
+root       348 /sbin/agetty 38400 tty2 linux
+root       488 /usr/libexec/postfix/master -w
+root       592 /usr/sbin/sshd
+root       592 sshd: izabelau [priv]
+root       592 sshd: sszkarla [priv]
+root       592 sshd: sszkarla [priv]
+root       592 sshd: apuniewi [priv]
+root       592 sshd: psyzdek [priv]
+root       592 sshd: hubertol [priv]
+root       592 sshd: jakkowal [priv]
+root       592 sshd: anetabru [priv]
+root      1160 /sbin/udevd --daemon
+root      4256 /usr/extra/apache2/bin/httpd -k start
+root      4644 /usr/bin/perl -w /adm/rjob/rjobd
+root      7376 php-fpm: master process (/etc/php-fpm.conf)
+root      7796 php-fpm: master process (/etc/php7/php-fpm.conf)
+-------------------------------------------------
+
+Zadanie 3.
+Polecenie: ps -eo pid,ppid | awk '{if ($2 == 1) {print $1}}' | wc -l
+Wynik: 42
+-------------------------------------------------
+
+Zadanie 4.
+Polecenie: ps -eo user,state | awk '{if ($2 == "S") {print $1, $2}}' | sort | uniq -c | sort -n | tail -n1 | awk '{print $2}'
+Wynik: apache
+-------------------------------------------------
+
+Zadanie 5.
+Polecenie: ps -eo pid,time,command --sort time | tail -n1
+Wynik: 6538 00:22:20 irssi
+-------------------------------------------------
+
+Zadanie 6.
+Polecenie: ps -eF | awk '{print $1, $3}' | grep $$ | wc -l
+Wynik: 4
+-------------------------------------------------

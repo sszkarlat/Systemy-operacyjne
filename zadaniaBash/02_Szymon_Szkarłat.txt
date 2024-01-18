@@ -1,0 +1,107 @@
+Szymon Szkarłat
+Laboratorium 2.
+-------------------------------------------------
+-------------------------------------------------
+
+
+Zadania -> operacje na tekście:
+Zadanie 1.
+Polecenie tr umożliwia zmiane znaków w inne, usuwanie nadmiernej ilości znaków (np. spacji, kropek itp.). Natomiast polecenie cut służy do wyciągania części z plików.
+-------------------------------------------------
+
+Zadanie 2.
+Za pomocą polecenia awk -F: '{ if ($3 == 14) {print $5} }' /etc/passwd możemy wyświetlić pełną nazwę użytkownika.
+-------------------------------------------------
+
+Zadanie 3.
+Polecenie: awk -F: '{ if ($7 == "/bin/bash") {print $0} }' /etc/passwd| wc -l
+Wynik: 7221 osób używa jako podstawowego interpretera poleceń interpretera Bash.
+-------------------------------------------------
+
+Zadanie 4.
+Polecenie: awk -F: '{ if ($3 > 20) {print $0} }' /etc/passwd| wc -l
+Wynik: W systemie numer identyfikacyjny (UID) większy od 20 posiada 8137 użytkowników.
+-------------------------------------------------
+
+Zadanie 5.
+Polecenie: awk -F: '{ {print $4} }' /etc/passwd | sort -n |tail -n1
+Wynik: Największy numer grupy lokalnej w systemie to 344.
+-------------------------------------------------
+
+Zadanie 6.
+POlecenie: expr `cat /etc/group | wc -l` - `awk -F: '{print $4}' /etc/passwd | sort | uniq |wc -l`
+Wynik: Grup w systemie, które nie są grupą podstawową dla ani jednego użytkownika, jest 53
+-------------------------------------------------
+
+Zadanie 7.
+Polecenie: awk -F: '{ if ($4 == ""){print $4} }' /etc/group |wc -l
+Wynik polecenia: Grup, które nie są grupami dodatkowymi dla żadnego użytkownika, jest 92.
+-------------------------------------------------
+
+Zadanie 8.
+Polecenie: cat /etc/passwd | cut -d: -f4 | grep "$(id -g)" | wc -l
+Wynik: Użytkowników w systemie, dla których grupa podstawowa jest taka sama jak moja, jest 1120.
+-------------------------------------------------
+
+Zadanie 9.
+Polecenie: cat /etc/passwd | cut -d: -f1 | grep -E "^.{8}" | wc -l
+Wynik: Tych użytkowników jest aż 4136, dlatego podaje przykładowe nazwy ze wszystkich możliwych -> np. ziebapaw, labedzio, blaszczy itd.
+-------------------------------------------------
+
+Zadanie 10.
+Polecenie: man ls > plik.txt
+Podstawowa różnica pomiędzy operatorami przekierowania > oraz >> jest taka że, > nadpisuje plik (zastępuje treść dotychczasową pliku nową, podaną przez użytkownika), a >> dopisuje do pliku nową treść, zawartość, oczywiście nie usuwuwając przy tym już istniejącej.
+-------------------------------------------------
+-------------------------------------------------
+
+
+Zadania -> operacje na plikach:
+Zadanie 1.
+Polecenie: mkdir -p /$HOME/c2/{text,bin}
+Wynik: Utworzenie odpowiedniej struktury katalogów.
+-------------------------------------------------
+
+Zadanie 2.
+O ich postaci decyduje adminstrator systemu. Polecenie ls -lR wyświetla interesujące nas informację o chociażby uprawnieniach dla wszystkich katalogów i plików w katalogu $HOME.
+-------------------------------------------------
+
+Zadanie 3.
+Za pomocą polecenia: ls -l sprawdzam uprawnienia dla wszystkich plików w katalogu $HOME i otrzymuję informację o uprawnieniach dla pliku wcześniej stworzonego, który nazywał się plik.txt, o to wynik tego polecenia: -rw-r--r-- 1 sszkarla ietgrp 9691 Nov 17 10:16 plik.txt
+Polecenie: chmod 600 ~/plik.txt
+Wynik polecenia: -rw------- 1 sszkarla ietgrp 9691 Nov 17 10:16 plik.txt, jedynie właściciel indywidualny może odczytać i zapisać plik.
+-------------------------------------------------
+
+Zadanie 4.
+1. Tworzę plik w katalogu c2: touch ~/c2/plik2.txt
+2. Zmieniam prawa dostępu dla katalogu c2 tak, aby polecenie rm nie zadziałało w katlogu c2: chmod 555 ~/c2
+3. Kopiuję plik do katalogu osobistego: cp ~/c2/plik2.txt ~. Uprawnienia (prawa dostępu) dla pliku się nie zmieniły.
+4. Zmieniam prawa dostępu dla nowego pliku, aby tylko właściciel indywidualny i inni czlonkowie jego grupy podstawowej mogli go odczytać za pomocą polecenia: chmod 440 ~/plik2.txt
+-------------------------------------------------
+
+Zadanie 5.
+Polecenie: cp /bin/ls c2/bin/moj_ls
+W taki sposób można skopiować cały katalog /usr/include/scsi: cp -R /usr/include/scsi destination
+-------------------------------------------------
+-------------------------------------------------
+
+
+Zadania sprawdzające:
+Zadanie 1.
+Polecenie: cat /etc/passwd | cut -d: -f4 | sort -n | uniq -c | awk '$1 ~ /[23]/' | wc -l
+Wynik: 16
+-------------------------------------------------
+
+Zadanie 2.
+Polecenie: cat /etc/passwd | cut -d: -f7 | grep /sbin/nologin | wc -l
+Wynik: 1
+-------------------------------------------------
+
+Zadanie 3.
+Polecenie: cat /etc/passwd | cut -d: -f5 | grep Nowak | wc -l
+Wynik: 45
+-------------------------------------------------
+
+Zadanie 4.
+Polecenie: last | awk '{print $NF}' | awk -F '[(:]' '$2 >= 1 {print $2}' | wc -l
+Wynik: 880
+-------------------------------------------------
