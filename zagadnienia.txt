@@ -1,3 +1,48 @@
+zadanie 0.
+#!/bin/bash
+
+if [ "$#" -ne 2 ];then
+        echo "Sposob uzycia: $0 <zakres X> <zakres Y>"
+        exit 1
+fi
+
+x=$1
+y=$2
+pytania=0
+poprawne=0
+bledne=0
+
+echo "Podanie 0 lub wartosci ujemnej konczy dzialanie programu."
+
+while true;do
+        liczba1=$(( (RANDOM % x) + 1))
+        liczba2=$(( (RANDOM % y) + 1))
+
+        echo "Podaj wynik $liczba1 * $liczba2."
+
+        read -p "Podaj odpowiedz: " odp
+
+        poprawnaOdp=$((liczba1*liczba2))
+
+        if [ "$odp" -le 0 ];then
+                echo -e "\nStatystyki:"
+                echo "Poprawne odp: $poprawne"
+                echo "Bledne odp: $bledne"
+                echo "Wszystkie pytania: $pytania"
+                break
+        else
+                if [ "$odp" -eq "$poprawnaOdp" ];then
+                        ((poprawne++))
+                        echo "Poprawna odp"
+                else
+                        ((bledne++))
+                        echo "Bledna odp"
+                fi
+                ((pytania++))
+        fi
+done
+
+
 zadanie 1.
 Polecenie wyświetla uprawnienia do pliku, w bierzącym katalogu tj. Desktop. Następnie wybiera tylko pliki zwykłe (plik zwykły, ma na początku "-"), następnie tylko pierwsza kolumna, następnie grupujemy (sort bez opcji), kolejno liczymy te linie, następnie sortujemy malejąco.
 ls -la | grep "^-" | awk '{print $1}' | sort | uniq -c | sort -nr
