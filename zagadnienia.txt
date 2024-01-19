@@ -42,6 +42,59 @@ while true;do
         fi
 done
 
+zadanie 0.5
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+int main(int argc, char *argv[]) {
+    if (argc != 3) {
+        printf("Sposob uzycia: %s <zakres X> <zakres Y>\n", argv[0]);
+        return 1;
+    }
+
+    int x = atoi(argv[1]);
+    int y = atoi(argv[2]);
+    int pytania = 0;
+    int poprawne = 0;
+    int bledne = 0;
+
+    printf("Podanie 0 lub wartosci ujemnej konczy dzialanie programu.\n");
+
+    srand(time(NULL));
+
+    while (1) {
+        int liczba1 = (rand() % x) + 1;
+        int liczba2 = (rand() % y) + 1;
+
+        printf("Podaj wynik %d * %d: ", liczba1, liczba2);
+
+        int odp;
+        scanf("%d", &odp);
+
+        int poprawnaOdp = liczba1 * liczba2;
+
+        if (odp <= 0) {
+            printf("\nStatystyki:\n");
+            printf("Poprawne odp: %d\n", poprawne);
+            printf("Bledne odp: %d\n", bledne);
+            printf("Wszystkie pytania: %d\n", pytania);
+            break;
+        } else {
+            if (odp == poprawnaOdp) {
+                poprawne++;
+                printf("Poprawna odp\n");
+            } else {
+                bledne++;
+                printf("Bledna odp\n");
+            }
+            pytania++;
+        }
+    }
+
+    return 0;
+}
+
 
 zadanie 1.
 Polecenie wyświetla uprawnienia do pliku, w bierzącym katalogu tj. Desktop. Następnie wybiera tylko pliki zwykłe (plik zwykły, ma na początku "-"), następnie tylko pierwsza kolumna, następnie grupujemy (sort bez opcji), kolejno liczymy te linie, następnie sortujemy malejąco.
